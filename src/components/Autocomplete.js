@@ -6,7 +6,7 @@ export default class Autocomplete extends Component{
 
   render(){
 
-    let {suggestions, showSuggestions, onChangeAuto, userInput, filteredSuggestions, handleClickSuggestion} = this.props;
+    let {showSuggestions, onChangeAuto, userInput, filteredSuggestions, handleClickSuggestion} = this.props;
     // console.log("AC: ", showSuggestions);
     // console.log("AC: ", onChangeAuto);
 
@@ -16,7 +16,7 @@ export default class Autocomplete extends Component{
       if(filteredSuggestions.length){
         // console.log(filteredSuggestions);
         suggestionsListComponent = (
-          <ul>
+          <ul className="suggestion_list">
             {
               filteredSuggestions.map((suggestion,index) => {
                 return(
@@ -36,7 +36,7 @@ export default class Autocomplete extends Component{
 
     return(
       <Fragment>
-        <input name="municipio" type="text" value={userInput} onChange={ onChangeAuto } placeholder="Municipio del estado" />
+        <input name="municipio" type="text" value={userInput} onChange={ onChangeAuto } placeholder="Busca tu municipio" />
         {suggestionsListComponent}
       </Fragment>
     );

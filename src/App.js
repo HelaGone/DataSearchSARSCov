@@ -144,7 +144,6 @@ export default class App extends Component {
     let {
       dataEstado,
       dataMunicipio,
-      muniSuggest,
       showSuggestions,
       showInputMuni,
       onChangeAuto,
@@ -164,12 +163,11 @@ export default class App extends Component {
 
           <div className="inner_wrapper">
             <form onSubmit={this.handleSubmit}>
-              <input name="estado" type="text" value={this.state.estado} onChange={this.handleOnChange} placeholder="Estado de la república"/>
+              <input name="estado" type="text" value={this.state.estado} onChange={this.handleOnChange} placeholder="Busca tu estado"/>
 
               {
                 showInputMuni && (
                   <Autocomplete
-                    suggestions={this.state.muniSuggest}
                     showSuggestions={showSuggestions}
                     onChangeAuto={onChangeAuto}
                     handleClickSuggestion={handleClickSuggestion}
@@ -202,7 +200,7 @@ export default class App extends Component {
             }
 
           </section>
-
+          <div className="inner_wrapper footer_source">Fuente: Secretaría de Salud</div>
         </section>
       </Fragment>
     );

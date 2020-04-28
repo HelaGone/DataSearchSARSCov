@@ -1,6 +1,13 @@
 body{background-color: #F2F2F2;color:#606060;}
+.light_green_bg{border-left:8px solid #C7EDB6;}
+.green_bg{border-left:8px solid #8DDA70;}
+.yellow_bg{border-left:8px solid #FFE849;}
+.orange_bg{border-left:8px solid #FFB062;}
+.red_bg{border-left:8px solid #FF7E7C;}
+.dark_red_bg{border-left:8px solid #BF5F5D;}
 .inner_wrapper{padding:0 16px;}
-input[type="text"]{display: block; border-style: none; border-bottom:3px solid rgba(0,0,0,0.3);width:70%;height:90px; margin:32px auto;font-size: 24px;background: transparent;outline: none;}
+.footer_source{text-align: center;}
+input[type="text"]{display: block; border-style: none; border-bottom:3px solid rgba(0,0,0,0.3);width:90%;height:90px; margin:32px auto;font-size: 24px;background: transparent;outline: none;}
 input[type="submit"], input[type="button"]{
   border-style: none;
   border-radius:5px;
@@ -19,7 +26,17 @@ input[type="submit"], input[type="button"]{
 .btn_search{background-color: #43D9AE;}
 .btn_clean{background-color: #b0efed;}
 
-.flex_wrapper{display:flex;flex-direction:row;flex-wrap: nowrap;justify-content: center;align-items: flex-start;}
-.localidad_name{text-transform: capitalize;}
+.results_section{width: 100%;margin:34px auto;}
+.flex_wrapper{display:flex;flex-direction:row;flex-wrap: nowrap;justify-content: space-around;align-items: flex-start;}
+.results_section .inner_wrapper{text-align: center;box-shadow:2px 4px 8px rgba(0,0,0,0.3); border-radius: 5px;padding:16px;flex-shrink: 0;width:calc(100% / 2.4 - 24px);}
+.localidad_name{text-transform: capitalize;margin-top:0;}
 .result_list{list-style: none; padding:0;margin:0;}
 .result_list li{margin:8px 0;}
+
+.no-suggestions{width:70%;margin:24px auto;text-align: center;}
+.suggestion_list{list-style: none;padding: 0;width:70%;margin:0 auto;display: flex;flex-wrap: wrap;}
+.suggestion_list li{background-color: #FFDC75; padding:8px; margin:8px;text-align: center;box-shadow: 2px 4px 8px rgba(0,0,0,0.3);font-weight: bold;}
+
+@media only screen and (min-width:1024px){
+  input[type="text"], .results_section{width:70%;}
+}
