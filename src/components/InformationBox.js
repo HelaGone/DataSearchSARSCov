@@ -1,7 +1,7 @@
 import React from 'react';
 
 const InformationBox = (props) => {
-  console.log(props.data);
+  // console.log(props.data);
   return(
     <div className="inner_wrapper">
       <h2 className="localidad_name">{props.localidad}</h2>

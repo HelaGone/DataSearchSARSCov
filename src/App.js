@@ -12,7 +12,8 @@ export default class App extends Component {
       estado:"",
       municipio:"",
       inputDisabled: true,
-      errorState: false
+      errorState: false,
+      municipios: []
     };
   };
 
@@ -22,12 +23,15 @@ export default class App extends Component {
       return;
     }
 
-    let apiurl = "https://noticieros.televisa.com/sarscov/?estado=aguascalientes";
+    let apiurl = "https://noticieros.televisa.com/sarscov/"; //PROD;
+    // let apiurl = "http://localhost/sarscov/"; //DEV
     if(query_edo !== '' && query_muni !== ''){
-      apiurl = `https://noticieros.televisa.com/sarscov/?estado=${this.sanitizeUserInput(query_edo)}&municipio=${this.sanitizeUserInput(query_muni)}`;
+      apiurl += `?estado=${this.sanitizeUserInput(query_edo)}&municipio=${this.sanitizeUserInput(query_muni)}`;
     }else if(query_edo !== '' && query_muni === ''){
-      apiurl = `https://noticieros.televisa.com/sarscov/?estado=${this.sanitizeUserInput(query_edo)}`;
+      apiurl += `?estado=${this.sanitizeUserInput(query_edo)}`;
     }
+
+    // console.log(apiurl);
 
     fetch(encodeURI(apiurl))
       .then(data => data.json())
@@ -36,7 +40,7 @@ export default class App extends Component {
         let keysArr = Object.keys(json.datos);
 
         if(keysArr.indexOf("municipio")){
-          this.setState({dataEstado: json});
+          this.setState({dataEstado: json, municipios: json.datos.municipios});
         }else{
           this.setState({dataMunicipio: json});
         }
@@ -110,9 +114,15 @@ export default class App extends Component {
   }
 
   render(){
-    let {dataEstado, dataMunicipio} = this.state;
+    let {dataEstado, dataMunicipio, municipios} = this.state;
     let renderEstado = (dataEstado !== '') ? true : false;
     let renderMunicipio = (dataMunicipio !== '') ? true : false;
+
+    // if(municipios !== []){
+    //     municipios.map(elem => {
+    //       console.log(Object.values(elem)[0]);
+    //     });
+    // }
 
     return (
       <Fragment>
@@ -131,6 +141,16 @@ export default class App extends Component {
               </div>
             </form>
           </div>
+
+          <ul>
+            {
+              municipios.map((elem, i) => {
+                return(
+                    <li key={i} >{Object.values(elem)[0]}</li>
+                )
+              })
+            }
+          </ul>
 
           <section className="results_section flex_wrapper">
             { this.state.errorState && <ErrorBox />}
