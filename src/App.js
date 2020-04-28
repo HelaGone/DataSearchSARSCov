@@ -2,6 +2,7 @@ import React, {Fragment, Component} from 'react';
 import './App.css';
 import InformationBox from './components/InformationBox';
 import ErrorBox from './components/ErrorBox';
+import Autocomplete from './components/Autocomplete';
 export default class App extends Component {
 
   constructor(props){
@@ -11,9 +12,14 @@ export default class App extends Component {
       dataMunicipio: "",
       estado:"",
       municipio:"",
-      inputDisabled: true,
+      showInputMuni: false,
       errorState: false,
-      municipios: []
+      muniSuggest: [],
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      userInput: '',
+      onChangeAuto: this.handleOnChangeAuto
     };
   };
 
@@ -31,8 +37,6 @@ export default class App extends Component {
       apiurl += `?estado=${this.sanitizeUserInput(query_edo)}`;
     }
 
-    // console.log(apiurl);
-
     fetch(encodeURI(apiurl))
       .then(data => data.json())
       .then(json => {
@@ -40,7 +44,7 @@ export default class App extends Component {
         let keysArr = Object.keys(json.datos);
 
         if(keysArr.indexOf("municipio")){
-          this.setState({dataEstado: json, municipios: json.datos.municipios});
+          this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
         }else{
           this.setState({dataMunicipio: json});
         }
@@ -52,8 +56,7 @@ export default class App extends Component {
           dataEstado: "",
           dataMunicipio: "",
           estado: "",
-          municipio: "",
-          inputDisabled: true
+          municipio: ""
         });
         // console.error("EL ERROR!: ",error);
         return error;
@@ -89,16 +92,37 @@ export default class App extends Component {
     const value = target.name === 'estado' ? target.value : target.value;
     const fieldName = target.name;
 
-    if(target.name === 'estado' && target.value !== ''){
-      if(target.value.length > 5){
-        this.setState({
-          inputDisabled: false
-        });
-      }
-    }
+    // if(target.name === 'estado' && target.value !== ''){
+    //   if(target.value.length > 5){
+    //     this.setState({
+    //       showInputMuni: true
+    //     });
+    //   }
+    // }
 
     this.setState({
       [fieldName]: value,
+    });
+  }
+
+  /*
+   * Se encarga de capturar el evento del cambio de valor en el input
+  */
+  handleOnChangeAuto = (event) => {
+
+
+    const {muniSuggest} = this.state;
+    const userInput = event.currentTarget.value;
+    const filteredSuggestions = muniSuggest.filter( (sug) => {
+        let strval = Object.values(sug)[0];
+        return strval.toLowerCase().indexOf(userInput.toLowerCase()) > -1;
+    });
+
+    this.setState({
+      activeSuggestion: 0,
+      filteredSuggestions: filteredSuggestions,
+      showSuggestions: true,
+      userInput: userInput
     });
   }
 
@@ -108,21 +132,27 @@ export default class App extends Component {
       dataMunicipio: "",
       estado: "",
       municipio: "",
-      inputDisabled: true,
+      showInputMuni: false,
       errorState: false
     });
   }
 
   render(){
-    let {dataEstado, dataMunicipio, municipios} = this.state;
+
+    let {
+      dataEstado,
+      dataMunicipio,
+      muniSuggest,
+      showSuggestions,
+      showInputMuni,
+      onChangeAuto,
+      userInput,
+      filteredSuggestions,
+      methods
+    } = this.state;
+
     let renderEstado = (dataEstado !== '') ? true : false;
     let renderMunicipio = (dataMunicipio !== '') ? true : false;
-
-    // if(municipios !== []){
-    //     municipios.map(elem => {
-    //       console.log(Object.values(elem)[0]);
-    //     });
-    // }
 
     return (
       <Fragment>
@@ -134,7 +164,27 @@ export default class App extends Component {
             <form onSubmit={this.handleSubmit}>
               <input name="estado" type="text" value={this.state.estado} onChange={this.handleOnChange} placeholder="Estado de la república"/>
 
-              <input name="municipio" type="text" value={this.state.municipio} onChange={this.handleOnChange} placeholder="Municipio del estado" disabled= {(this.state.inputDisabled)? "disabled" : ""}/>
+              {
+                showInputMuni && (
+                  <Autocomplete
+                    suggestions={this.state.muniSuggest}
+                    showSuggestions={showSuggestions}
+                    onChangeAuto={onChangeAuto}
+                    filteredSuggestions={filteredSuggestions}
+                    userInput={userInput}
+                    />
+                )
+              }
+
+
+                {/*<Autocomplete
+                  showSuggestions=""
+                  userInput=""
+                  filteredSuggestions=""
+                  suggestions={this.state.muniSuggest}
+                  methods={onChangeAuto}
+                  showInputMuni={showInputMuni} />*/}
+
               <div className="button_container">
                 <input className="btn_search" type="submit" value="Buscar"></input>
                 <input className="btn_clean" type="button" value="Limpiar" onClick={this.handleClearForm}></input>
@@ -144,11 +194,11 @@ export default class App extends Component {
 
           <ul>
             {
-              municipios.map((elem, i) => {
+              /*muniSuggest.map((elem, i) => {
                 return(
                     <li key={i} >{Object.values(elem)[0]}</li>
                 )
-              })
+              })*/
             }
           </ul>
 
