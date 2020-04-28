@@ -6,7 +6,7 @@ export default class Autocomplete extends Component{
 
   render(){
 
-    let {suggestions, showSuggestions, onChangeAuto, userInput, filteredSuggestions} = this.props;
+    let {suggestions, showSuggestions, onChangeAuto, userInput, filteredSuggestions, handleClickSuggestion} = this.props;
     // console.log("AC: ", showSuggestions);
     // console.log("AC: ", onChangeAuto);
 
@@ -19,9 +19,8 @@ export default class Autocomplete extends Component{
           <ul>
             {
               filteredSuggestions.map((suggestion,index) => {
-                console.log(Object.values(suggestion));
                 return(
-                  <li key={index} onClick="">{Object.values(suggestion)}</li>
+                  <li key={index} onClick={handleClickSuggestion}>{Object.values(suggestion)}</li>
                 );
               })
             }

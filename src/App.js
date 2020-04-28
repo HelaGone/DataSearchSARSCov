@@ -11,7 +11,6 @@ export default class App extends Component {
       dataEstado:"",
       dataMunicipio: "",
       estado:"",
-      municipio:"",
       showInputMuni: false,
       errorState: false,
       muniSuggest: [],
@@ -19,7 +18,8 @@ export default class App extends Component {
       filteredSuggestions: [],
       showSuggestions: false,
       userInput: '',
-      onChangeAuto: this.handleOnChangeAuto
+      onChangeAuto: this.handleOnChangeAuto,
+      handleClickSuggestion: this.handleClickSuggestion
     };
   };
 
@@ -55,8 +55,7 @@ export default class App extends Component {
           errorState: true,
           dataEstado: "",
           dataMunicipio: "",
-          estado: "",
-          municipio: ""
+          estado: ""
         });
         // console.error("EL ERROR!: ",error);
         return error;
@@ -83,7 +82,7 @@ export default class App extends Component {
 
   handleSubmit = (event) => {
     this.setState({errorState: false})
-    this.getDataFromApi(this.state.estado, this.state.municipio);
+    this.getDataFromApi(this.state.estado, this.state.userInput);
     event.preventDefault();
   }
 
@@ -91,14 +90,6 @@ export default class App extends Component {
     const target = event.target;
     const value = target.name === 'estado' ? target.value : target.value;
     const fieldName = target.name;
-
-    // if(target.name === 'estado' && target.value !== ''){
-    //   if(target.value.length > 5){
-    //     this.setState({
-    //       showInputMuni: true
-    //     });
-    //   }
-    // }
 
     this.setState({
       [fieldName]: value,
@@ -109,8 +100,6 @@ export default class App extends Component {
    * Se encarga de capturar el evento del cambio de valor en el input
   */
   handleOnChangeAuto = (event) => {
-
-
     const {muniSuggest} = this.state;
     const userInput = event.currentTarget.value;
     const filteredSuggestions = muniSuggest.filter( (sug) => {
@@ -126,14 +115,27 @@ export default class App extends Component {
     });
   }
 
+  handleClickSuggestion = (event) => {
+    this.setState({
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      userInput: event.currentTarget.innerText
+    });
+  }
+
   handleClearForm = () => {
     this.setState({
-      dataEstado: "",
+      dataEstado:"",
       dataMunicipio: "",
-      estado: "",
-      municipio: "",
+      estado:"",
       showInputMuni: false,
-      errorState: false
+      errorState: false,
+      muniSuggest: [],
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      userInput: '',
     });
   }
 
@@ -148,7 +150,7 @@ export default class App extends Component {
       onChangeAuto,
       userInput,
       filteredSuggestions,
-      methods
+      handleClickSuggestion
     } = this.state;
 
     let renderEstado = (dataEstado !== '') ? true : false;
@@ -170,20 +172,12 @@ export default class App extends Component {
                     suggestions={this.state.muniSuggest}
                     showSuggestions={showSuggestions}
                     onChangeAuto={onChangeAuto}
+                    handleClickSuggestion={handleClickSuggestion}
                     filteredSuggestions={filteredSuggestions}
                     userInput={userInput}
                     />
                 )
               }
-
-
-                {/*<Autocomplete
-                  showSuggestions=""
-                  userInput=""
-                  filteredSuggestions=""
-                  suggestions={this.state.muniSuggest}
-                  methods={onChangeAuto}
-                  showInputMuni={showInputMuni} />*/}
 
               <div className="button_container">
                 <input className="btn_search" type="submit" value="Buscar"></input>
@@ -192,18 +186,8 @@ export default class App extends Component {
             </form>
           </div>
 
-          <ul>
-            {
-              /*muniSuggest.map((elem, i) => {
-                return(
-                    <li key={i} >{Object.values(elem)[0]}</li>
-                )
-              })*/
-            }
-          </ul>
-
           <section className="results_section flex_wrapper">
-            { this.state.errorState && <ErrorBox />}
+            { this.state.errorState && <ErrorBox /> }
 
             {
               renderEstado && (
@@ -213,7 +197,7 @@ export default class App extends Component {
 
             {
               renderMunicipio && (
-                <InformationBox data={dataMunicipio} localidad={this.state.municipio}/>
+                <InformationBox data={dataMunicipio} localidad={this.state.userInput}/>
               )
             }
 

@@ -2,9 +2,12 @@ import React from 'react';
 
 const InformationBox = (props) => {
   // console.log(props.data);
+
+  let {localidad} = props;
+
   return(
     <div className="inner_wrapper">
-      <h2 className="localidad_name">{props.localidad}</h2>
+      <h2 className="localidad_name">{localidad.toLowerCase()}</h2>
       <ul className="result_list">
         <li>
           <span>Positivos: {props.data.datos.positivos}</span>
