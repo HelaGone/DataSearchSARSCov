@@ -4,7 +4,6 @@ const InformationBox = (props) => {
   // console.log(props.data);
 
   let {localidad, data} = props;
-  console.log(data.datos.activos);
   let colorClass = 'inner_wrapper';
 
   if(data.datos.activos >=0 && data.datos.activos <51){
@@ -27,23 +26,28 @@ const InformationBox = (props) => {
       <h2 className="localidad_name">{localidad.toLowerCase()}</h2>
       <ul className="result_list">
         <li>
-          <span>Positivos: {props.data.datos.positivos}</span>
+          <div className="key_circle bg_green"></div>
+          <span> <strong>{props.data.datos.positivos}</strong> positivos </span>
           <span></span>
         </li>
         <li>
-          <span>Activos: {props.data.datos.activos}</span>
+        <div className="key_circle bg_yellow"></div>
+        <span> <strong>{props.data.datos.negativos}</strong> negativos </span>
+        <span></span>
+        </li>
+        <li>
+          <div className="key_circle bg_salmon"></div>
+          <span> <strong>{props.data.datos.activos}</strong> activos </span>
           <span></span>
         </li>
         <li>
-          <span>Negativos: {props.data.datos.negativos}</span>
-          <span></span>
+        <div className="key_circle bg_blue"></div>
+        <span> <strong>{props.data.datos.pendientes}</strong> pendientes </span>
+        <span></span>
         </li>
         <li>
-          <span>Muertes: {props.data.datos.defunciones}</span>
-          <span></span>
-        </li>
-        <li>
-          <span>Pendientes: {props.data.datos.pendientes}</span>
+          <div className="key_circle bg_lightGrey"></div>
+          <span> <strong>{props.data.datos.defunciones}</strong> muertes </span>
           <span></span>
         </li>
       </ul>

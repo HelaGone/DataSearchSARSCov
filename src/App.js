@@ -3,6 +3,7 @@ import './App.css';
 import InformationBox from './components/InformationBox';
 import ErrorBox from './components/ErrorBox';
 import Autocomplete from './components/Autocomplete';
+import logo from './logoCovSrch.svg';
 export default class App extends Component {
 
   constructor(props){
@@ -88,11 +89,10 @@ export default class App extends Component {
 
   handleOnChange = (event) => {
     const target = event.target;
-    const value = target.name === 'estado' ? target.value : target.value;
-    const fieldName = target.name;
+    const value = target.value;
 
     this.setState({
-      [fieldName]: value,
+      estado: value
     });
   }
 
@@ -149,21 +149,59 @@ export default class App extends Component {
       onChangeAuto,
       userInput,
       filteredSuggestions,
-      handleClickSuggestion
+      handleClickSuggestion,
+      estado
     } = this.state;
 
     let renderEstado = (dataEstado !== '') ? true : false;
     let renderMunicipio = (dataMunicipio !== '') ? true : false;
 
+    console.log(estado);
+
     return (
       <Fragment>
         <section className="main_section_wrapper">
 
-          <h1>BUSCADOR DE ACTIVIDAD COVID POR ESTADO Y MUNICIPIO</h1>
+          <div className="logo_container">
+            <img src={logo} alt="Logo Buscador Coronavirus" />
+          </div>
 
           <div className="inner_wrapper">
             <form onSubmit={this.handleSubmit}>
-              <input name="estado" type="text" value={this.state.estado} onChange={this.handleOnChange} placeholder="Busca tu estado"/>
+              <select value={estado} onChange={this.handleOnChange}>
+                <option default>Selecciona tu estado</option>
+                <option value="aguascalientes">Aguascalientes</option>
+                <option value="baja california">Baja California</option>
+                <option value="baja california sur">Baja California Sur</option>
+                <option value="campeche">Campeche</option>
+                <option value="ciudad de mexico">Ciudad de México</option>
+                <option value="chiapas">Chiapas</option>
+                <option value="chihuahua">Chihuahua</option>
+                <option value="coahuila">Coahuila</option>
+                <option value="colima">Colima</option>
+                <option value="durango">Durango</option>
+                <option value="estado de mexico">Estado de México</option>
+                <option value="guanajuato">Guanajuato</option>
+                <option value="guerrero">Guerrero</option>
+                <option value="hidalgo">Hidalgo</option>
+                <option value="jalisco">Jalisco</option>
+                <option value="michoacán">Michoacán</option>
+                <option value="morelos">Morelos</option>
+                <option value="nayarit">Nayarit</option>
+                <option value="nuevo leon">Nuevo León</option>
+                <option value="oaxaca">Oaxaca</option>
+                <option value="puebla">Puebla</option>
+                <option value="queretaro">Querétaro</option>
+                <option value="san luis potosi">San Luis Potosí</option>
+                <option value="sinaloa">Sinaloa</option>
+                <option value="sonora">Sonora</option>
+                <option value="tabasco">Tabasco</option>
+                <option value="tamaulipas">Tamaulipas</option>
+                <option value="tlaxcala">Tlaxcala</option>
+                <option value="veracruz">Veracruz</option>
+                <option value="yucatan">Yucatán</option>
+                <option value="zacatecas">Zacatecas</option>
+              </select>
 
               {
                 showInputMuni && (
@@ -188,14 +226,14 @@ export default class App extends Component {
             { this.state.errorState && <ErrorBox /> }
 
             {
-              renderEstado && (
-                <InformationBox data={dataEstado} localidad={this.state.estado}/>
+              renderMunicipio && (
+                <InformationBox data={dataMunicipio} localidad={this.state.userInput}/>
               )
             }
 
             {
-              renderMunicipio && (
-                <InformationBox data={dataMunicipio} localidad={this.state.userInput}/>
+              renderEstado && (
+                <InformationBox data={dataEstado} localidad={this.state.estado}/>
               )
             }
 
