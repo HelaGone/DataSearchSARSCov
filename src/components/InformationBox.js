@@ -18,6 +18,8 @@ const InformationBox = (props) => {
     colorClass += ' red_bg';
   }else if(data.datos.activos >1000 && data.datos.activos <3001){
     colorClass += ' dark_red_bg';
+  }else if(data.datos.activos >3001){
+    colorClass += ' darkdark_red_bg';
   }
 
 

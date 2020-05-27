@@ -3,6 +3,7 @@ import './App.css';
 import InformationBox from './components/InformationBox';
 import ErrorBox from './components/ErrorBox';
 import Autocomplete from './components/Autocomplete';
+import EstatusBox from './components/EstatusBox';
 import logo from './logoCovSrch.svg';
 export default class App extends Component {
 
@@ -38,19 +39,141 @@ export default class App extends Component {
       apiurl += `?estado=${this.sanitizeUserInput(query_edo)}`;
     }
 
+    let comparison = "";
+    switch(query_edo){
+      case "aguascalientes":
+        comparison = "AGU";
+      break;
+      case "baja california":
+        comparison = "BCN";
+      break;
+      case "baja california sur":
+        comparison = "BCS";
+      break;
+      case "campeche":
+        comparison = "CAM";
+      break;
+      case "ciudad de mexico":
+        comparison = "DIF";
+      break;
+      case "chiapas":
+        comparison = "CHP";
+      break;
+      case "chihuahua":
+        comparison = "CHH";
+      break;
+      case "coahuila":
+        comparison = "COA";
+      break;
+      case "colima":
+        comparison = "COL";
+      break;
+      case "durango":
+        comparison = "DUR";
+      break;
+      case "estado de mexico":
+        comparison = "MEX";
+      break;
+      case "guanajuato":
+        comparison = "GUA";
+      break;
+      case "guerrero":
+        comparison = "GUE";
+      break;
+      case "hidalgo":
+        comparison = "HID";
+      break;
+      case "jalisco":
+        comparison = "JAL";
+      break;
+      case "michoacán":
+        comparison = "MIC";
+      break;
+      case "morelos":
+        comparison = "MOR";
+      break;
+      case "nayarit":
+        comparison = "NAY";
+      break;
+      case "nuevo leon":
+        comparison = "NL";
+      break;
+      case "oaxaca":
+        comparison = "OAX";
+      break;
+      case "puebla":
+        comparison = "PUE";
+      break;
+      case "queretaro":
+        comparison = "QUE";
+      break;
+      case "quintana roo":
+        comparison = "QRO";
+      break;
+      case "san luis potosi":
+        comparison = "SLP";
+      break;
+      case "sinaloa":
+        comparison = "SIN";
+      break;
+      case "sonora":
+        comparison = "SON";
+      break;
+      case "tabasco":
+        comparison = "TAB";
+      break;
+      case "tamaulipas":
+        comparison = "TAM";
+      break;
+      case "tlaxcala":
+        comparison = "TLX";
+      break;
+      case "veracruz":
+        comparison = "VER";
+      break;
+      case "yucatan":
+        comparison = "YUC";
+      break;
+      case "zacatecas":
+        comparison = "ZAC";
+      break;
+      default: comparison = "DIF";
+    }
+
     fetch(encodeURI(apiurl))
       .then(data => data.json())
       .then(json => {
-
         let keysArr = Object.keys(json.datos);
 
-        if(keysArr.indexOf("municipio")){
-          this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
-        }else{
-          this.setState({dataMunicipio: json});
-        }
+        //GET GSHEET STATE DATA
+        fetch("./data.json")
+          .then(data => data.json())
+          .then(gSheetJson => {
 
-        return json;
+            let obj = gSheetJson;
+
+            for(const key of Object.keys(obj)){
+              let edoClav = key;
+              let edoStat = obj[key];
+              if(edoClav === comparison){
+                //Asigna un nuevo campo "estatus" al objeto json y le asigna
+                // el valor de la gSheet
+                if(keysArr.indexOf("estado")){
+                  json.datos.cov_status = parseInt(edoStat, 10);
+                }
+
+              }
+            }
+
+            if(keysArr.indexOf("municipio")){
+              this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
+            }else{
+              this.setState({dataMunicipio: json});
+            }
+
+            return json;
+
+          }).catch(error => console.error(error));
       }).catch(error => {
         this.setState({
           errorState: true,
@@ -153,10 +276,11 @@ export default class App extends Component {
       estado
     } = this.state;
 
+
+
     let renderEstado = (dataEstado !== '') ? true : false;
     let renderMunicipio = (dataMunicipio !== '') ? true : false;
-
-    console.log(estado);
+    let {estatus} = dataEstado;
 
     return (
       <Fragment>
@@ -192,6 +316,7 @@ export default class App extends Component {
                 <option value="oaxaca">Oaxaca</option>
                 <option value="puebla">Puebla</option>
                 <option value="queretaro">Querétaro</option>
+                <option value="quintana-roo">Quintana Roo</option>
                 <option value="san luis potosi">San Luis Potosí</option>
                 <option value="sinaloa">Sinaloa</option>
                 <option value="sonora">Sonora</option>
@@ -221,6 +346,10 @@ export default class App extends Component {
               </div>
             </form>
           </div>
+
+          <section className="status_alert inner_wrapper">
+            <EstatusBox estatus={dataEstado} />
+          </section>
 
           <section className="results_section flex_wrapper">
             { this.state.errorState && <ErrorBox /> }
