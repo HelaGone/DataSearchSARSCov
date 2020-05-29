@@ -149,9 +149,7 @@ export default class App extends Component {
         fetch("./data.json")
           .then(data => data.json())
           .then(gSheetJson => {
-
             let obj = gSheetJson;
-
             for(const key of Object.keys(obj)){
               let edoClav = key;
               let edoStat = obj[key];
