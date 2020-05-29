@@ -48,8 +48,13 @@ input[type="submit"], input[type="button"]{
 .results_section{width: 100%;margin:34px auto;}
 .results_section .inner_wrapper{box-shadow:2px 4px 8px rgba(0,0,0,0.3); border-radius: 5px;padding:16px;flex-shrink: 0;width:80%;margin:24px auto;}
 .localidad_name{text-transform: capitalize;margin-top:0;color:#5369E9;}
-.status_alert{margin-top:24px;}
-.localidad_estatus_box{padding:4px 16px;border-radius: 5px;width:70%;margin:32px auto;}
+.status_alert{border-top:1px solid #9293A5;border-bottom:1px solid #9293A5; margin-top:24px;width:70%;margin:32px auto;}
+.localidad_estatus_box h2{text-align: center;font-size: 40px;}
+.localidad_estatus_box h3{text-align: center;color:#5369E9;font-size: 30px;font-weight: 300;}
+.localidad_estatus_box h3 span{font-size: 40px;padding:0 4px;color:#4A4B69;}
+.localidad_estatus_box ul{max-width: 70%;margin:40px auto;}
+
+
 .result_list{list-style: none; padding:0;margin:0;}
 .result_list li{margin:8px 0;}
 .result_list li span strong{font-size: 32px;}

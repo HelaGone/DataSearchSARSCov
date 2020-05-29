@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 const EstatusBox = (props) => {
-  let {estatus} = props;
+  let {estatus, localidad} = props;
   let descripcion = [
     [
       "Actividades esenciales (Incluyen minería, construcción y fabricación de equipo de transporte)"
@@ -23,52 +23,57 @@ const EstatusBox = (props) => {
       "Cuidado de control a publaciones vulnerables"
     ]
   ];
-
-  let statusColorClass = 'localidad_estatus_box';
+  let statusColorClass = '';
   let lbl_estatus = "";
   let txt_descrip = [];
+  let renderEdo = false;
 
-  if(estatus != ''){
+  if(estatus !== ''){
+    renderEdo = true;
     let {cov_status} = estatus.datos
     switch(cov_status){
       case 1:
-      statusColorClass += ' _red';
-      lbl_estatus = 'Rojo';
+      statusColorClass = ' _red';
+      lbl_estatus = 'Riesgo máximo';
       txt_descrip = descripcion[cov_status - 1];
       break;
       case 2:
-      statusColorClass += ' _orange';
-      lbl_estatus = 'Naranja';
+      statusColorClass = ' _orange';
+      lbl_estatus = 'Riesgo alto';
       txt_descrip = descripcion[cov_status - 1];
       break;
       case 3:
-      statusColorClass += ' _yellow';
-      lbl_estatus = 'Amarillo';
+      statusColorClass = ' _yellow';
+      lbl_estatus = 'Riesgo medio';
       txt_descrip = descripcion[cov_status - 1];
       break;
       case 4:
-      statusColorClass += ' _green';
-      lbl_estatus = 'Verde';
+      statusColorClass = ' _green';
+      lbl_estatus = 'Riesgo bajo';
       txt_descrip = descripcion[cov_status - 1];
       break;
       default:
     }
   }
 
-  console.log(txt_descrip);
   return(
-    <div className={statusColorClass}>
-      <h3>
-        {lbl_estatus}
-      </h3>
-      <ul>
-        {
-          txt_descrip.map((item, i) => {
-            return <li key={i}>{item}</li>
-          })
-        }
-      </ul>
-    </div>
+    <Fragment>
+      {
+        renderEdo && (
+          <div className="localidad_estatus_box">
+            <h2>{localidad.toUpperCase()}</h2>
+            <h3>Semáforo de reactivación <span className={statusColorClass}>{lbl_estatus}</span></h3>
+            <ul>
+              {
+                txt_descrip.map((item, i) => {
+                  return <li key={i}>{item}</li>
+                })
+              }
+            </ul>
+          </div>
+        )
+      }
+    </Fragment>
   );
 }
 export default EstatusBox;

@@ -280,7 +280,6 @@ export default class App extends Component {
 
     let renderEstado = (dataEstado !== '') ? true : false;
     let renderMunicipio = (dataMunicipio !== '') ? true : false;
-    let {estatus} = dataEstado;
 
     return (
       <Fragment>
@@ -348,7 +347,7 @@ export default class App extends Component {
           </div>
 
           <section className="status_alert inner_wrapper">
-            <EstatusBox estatus={dataEstado} />
+            <EstatusBox estatus={dataEstado} localidad={estado}/>
           </section>
 
           <section className="results_section flex_wrapper">
