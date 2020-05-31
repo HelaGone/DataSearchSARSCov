@@ -415,6 +415,10 @@ export default class App extends Component {
 
           </section>
           <div className="inner_wrapper footer_source">Fuente: Secretaría de Salud</div>
+
+          <div className="btn_returnNT">
+            <a href="https://noticieros.televisa.com">Ir a NOTICIEROS TELEVISA</a>
+          </div>
         </section>
       </Fragment>
     );
