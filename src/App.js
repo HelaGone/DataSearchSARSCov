@@ -5,8 +5,8 @@ import ErrorBox from './components/ErrorBox';
 import Autocomplete from './components/Autocomplete';
 import EstatusBox from './components/EstatusBox';
 import logo from './logoCovSrch.svg';
-export default class App extends Component {
 
+export default class App extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -146,7 +146,7 @@ export default class App extends Component {
         let keysArr = Object.keys(json.datos);
 
         //GET GSHEET STATE DATA
-        fetch("./data.json")
+        fetch("http://localhost/covid-data/data.json")
           .then(data => data.json())
           .then(gSheetJson => {
             let obj = gSheetJson;

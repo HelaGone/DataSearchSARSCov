@@ -62,7 +62,8 @@ const EstatusBox = (props) => {
         renderEdo && (
           <div className="localidad_estatus_box">
             <h2>{localidad.toUpperCase()}</h2>
-            <h3>Semáforo de reactivación: <span className={statusColorClass}>{lbl_estatus}</span></h3>
+            <h3>Semáforo de reactivación: </h3>
+            <p className={statusColorClass}>{lbl_estatus}</p>
             <ul>
               {
                 txt_descrip.map((item, i) => {
