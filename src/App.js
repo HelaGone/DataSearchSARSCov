@@ -4,7 +4,21 @@ import InformationBox from './components/InformationBox';
 import ErrorBox from './components/ErrorBox';
 import Autocomplete from './components/Autocomplete';
 import EstatusBox from './components/EstatusBox';
+import * as firebase from 'firebase/app';
+import "firebase/firestore";
 import logo from './logoCovSrch.svg';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDihzAZdliuoZIQF6O7fHzqlwn3hi2QaH8",
+  authDomain: "semaforo-covid.firebaseapp.com",
+  databaseURL: "https://semaforo-covid.firebaseio.com",
+  projectId: "semaforo-covid",
+  storageBucket: "semaforo-covid.appspot.com",
+  messagingSenderId: "668191319379",
+  appId: "1:668191319379:web:c2802d94676fcdead52da6"
+};
+
+firebase.initializeApp(firebaseConfig);
 
 export default class App extends Component {
   constructor(props){
@@ -42,100 +56,100 @@ export default class App extends Component {
     let comparison = "";
     switch(query_edo){
       case "aguascalientes":
-        comparison = "AGU";
+        comparison = "MX-AGU";
       break;
       case "baja california":
-        comparison = "BCN";
+        comparison = "MX-BCN";
       break;
       case "baja california sur":
-        comparison = "BCS";
+        comparison = "MX-BCS";
       break;
       case "campeche":
-        comparison = "CAM";
+        comparison = "MX-CAM";
       break;
       case "ciudad de mexico":
-        comparison = "DIF";
+        comparison = "MX-DIF";
       break;
       case "chiapas":
-        comparison = "CHP";
+        comparison = "MX-CHP";
       break;
       case "chihuahua":
-        comparison = "CHH";
+        comparison = "MX-CHH";
       break;
       case "coahuila":
-        comparison = "COA";
+        comparison = "MX-COA";
       break;
       case "colima":
-        comparison = "COL";
+        comparison = "MX-COL";
       break;
       case "durango":
-        comparison = "DUR";
+        comparison = "MX-DUR";
       break;
       case "estado de mexico":
-        comparison = "MEX";
+        comparison = "MX-MEX";
       break;
       case "guanajuato":
-        comparison = "GUA";
+        comparison = "MX-GUA";
       break;
       case "guerrero":
-        comparison = "GUE";
+        comparison = "MX-GRO";
       break;
       case "hidalgo":
-        comparison = "HID";
+        comparison = "MX-HID";
       break;
       case "jalisco":
-        comparison = "JAL";
+        comparison = "MX-JAL";
       break;
       case "michoacán":
-        comparison = "MIC";
+        comparison = "MX-MIC";
       break;
       case "morelos":
-        comparison = "MOR";
+        comparison = "MX-MOR";
       break;
       case "nayarit":
-        comparison = "NAY";
+        comparison = "MX-NAY";
       break;
       case "nuevo leon":
-        comparison = "NL";
+        comparison = "MX-NEL";
       break;
       case "oaxaca":
-        comparison = "OAX";
+        comparison = "MX-OAX";
       break;
       case "puebla":
-        comparison = "PUE";
+        comparison = "MX-PUE";
       break;
       case "queretaro":
-        comparison = "QUE";
+        comparison = "MX-QUE";
       break;
       case "quintana roo":
-        comparison = "QRO";
+        comparison = "MX-ROO";
       break;
       case "san luis potosi":
-        comparison = "SLP";
+        comparison = "MX-SLP";
       break;
       case "sinaloa":
-        comparison = "SIN";
+        comparison = "MX-SIN";
       break;
       case "sonora":
-        comparison = "SON";
+        comparison = "MX-SON";
       break;
       case "tabasco":
-        comparison = "TAB";
+        comparison = "MX-TAB";
       break;
       case "tamaulipas":
-        comparison = "TAM";
+        comparison = "MX-TAM";
       break;
       case "tlaxcala":
-        comparison = "TLX";
+        comparison = "MX-TLA";
       break;
       case "veracruz":
-        comparison = "VER";
+        comparison = "MX-VER";
       break;
       case "yucatan":
-        comparison = "YUC";
+        comparison = "MX-YUC";
       break;
       case "zacatecas":
-        comparison = "ZAC";
+        comparison = "MX-ZAC";
       break;
       default: comparison = "DIF";
     }
@@ -145,33 +159,70 @@ export default class App extends Component {
       .then(json => {
         let keysArr = Object.keys(json.datos);
 
-        //GET GSHEET STATE DATA
-        fetch("http://localhost/covid-data/data.json")
-          .then(data => data.json())
-          .then(gSheetJson => {
-            let obj = gSheetJson;
-            for(const key of Object.keys(obj)){
-              let edoClav = key;
-              let edoStat = obj[key];
-              if(edoClav === comparison){
-                //Asigna un nuevo campo "estatus" al objeto json y le asigna
-                // el valor de la gSheet
-                if(keysArr.indexOf("estado")){
-                  json.datos.cov_status = parseInt(edoStat, 10);
+
+        const db = firebase.firestore();
+        const fir_dataCovid_ref = db.collection('datosCovid');
+        let allData = fir_dataCovid_ref.get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              //Getting and returning data from firebase
+              let fir_data = doc.data();
+              let obj = fir_data.estatal;
+
+              for(const key of Object.keys(obj) ){
+                let edoClav = Object.keys(obj[key]);
+                let edobj = Object.values( obj[key]);
+                let edoStat = edobj[0].estatus;
+
+                if(edoClav[0] === comparison){
+                  //Asigna un nuevo campo "estatus" al objeto json y le asigna
+                  // el valor de la gSheet
+                  if(keysArr.indexOf("estado")){
+                    json.datos.cov_status = parseInt(edoStat, 10);
+                  }
+
                 }
-
               }
-            }
 
-            if(keysArr.indexOf("municipio")){
-              this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
-            }else{
-              this.setState({dataMunicipio: json});
-            }
+              if(keysArr.indexOf("municipio")){
+                this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
+              }else{
+                this.setState({dataMunicipio: json});
+              }
 
-            return json;
+            });
+          }).catch(err => console.error("ERR: ", err));
 
-          }).catch(error => console.error(error));
+        //GET GSHEET STATE DATA
+
+        // fetch("http://localhost/covid-data/data.json")
+        //   .then(data => data.json())
+        //   .then(gSheetJson => {
+        //     let obj = gSheetJson;
+        //     for(const key of Object.keys(obj)){
+        //       let edoClav = key;
+        //       let edoStat = obj[key];
+        //       if(edoClav === comparison){
+        //         //Asigna un nuevo campo "estatus" al objeto json y le asigna
+        //         // el valor de la gSheet
+        //         if(keysArr.indexOf("estado")){
+        //           json.datos.cov_status = parseInt(edoStat, 10);
+        //         }
+        //
+        //       }
+        //     }
+        //
+        //     if(keysArr.indexOf("municipio")){
+        //       this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
+        //     }else{
+        //       this.setState({dataMunicipio: json});
+        //     }
+        //
+        //     return json;
+        //
+        // }).catch(error => console.error(error));
+
+
       }).catch(error => {
         this.setState({
           errorState: true,
@@ -274,10 +325,9 @@ export default class App extends Component {
       estado
     } = this.state;
 
-
-
     let renderEstado = (dataEstado !== '') ? true : false;
     let renderMunicipio = (dataMunicipio !== '') ? true : false;
+
 
     return (
       <Fragment>
