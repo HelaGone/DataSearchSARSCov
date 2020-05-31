@@ -49,11 +49,12 @@ input[type="submit"], input[type="button"]{
 .results_section .inner_wrapper{box-shadow:2px 4px 8px rgba(0,0,0,0.3); border-radius: 5px;padding:16px;flex-shrink: 0;width:80%;margin:24px auto;}
 .localidad_name{text-transform: capitalize;margin-top:0;color:#5369E9;}
 .status_alert{border-top:1px solid #9293A5;border-bottom:1px solid #9293A5; margin-top:24px;margin:32px auto;}
+.localidad_estatus_box{max-width: 480px;margin:0 auto;}
 .localidad_estatus_box h2{text-align: center;font-size: 30px;}
-.localidad_estatus_box h3{text-align: center;color:#5369E9;font-size: 22px;font-weight: 300;}
-.localidad_estatus_box h3 span{font-size: 40px;padding:0 4px;color:#4A4B69;}
-.localidad_estatus_box ul{max-width: 70%;margin:40px auto;}
-.localidad_estatus_box ul li{font-size: 22px;margin-bottom: 8px;}
+.localidad_estatus_box h3{text-align: center;color:#5369E9;font-size: 22px;font-weight: 300;margin-bottom:8px;}
+.localidad_estatus_box p{font-size: 40px;padding:0 4px;color:#4A4B69;margin:0;}
+.localidad_estatus_box ul{margin:25px auto;padding-left: 20px;}
+.localidad_estatus_box ul li{font-size: 18px;margin-bottom: 8px;}
 
 
 .result_list{list-style: none; padding:0;margin:0;}
