@@ -4,6 +4,7 @@ import InformationBox from './components/InformationBox';
 import ErrorBox from './components/ErrorBox';
 import Autocomplete from './components/Autocomplete';
 import EstatusBox from './components/EstatusBox';
+import MapBox from './components/MapBox';
 import * as firebase from 'firebase/app';
 import "firebase/firestore";
 import logo from './logoCovSrch.svg';
@@ -20,10 +21,14 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+const db = firebase.firestore();
+const fir_dataCovid_ref = db.collection('datosCovid');
+
 export default class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      allStateData: {},
       dataEstado:"",
       dataMunicipio: "",
       estado:"",
@@ -38,6 +43,22 @@ export default class App extends Component {
       handleClickSuggestion: this.handleClickSuggestion
     };
   };
+
+  componentDidMount(){
+      this.getDataForMap();
+  }
+
+  getDataForMap = () => {
+    let allStateData = fir_dataCovid_ref.get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          //Getting and returning data from firebase
+          let fir_data = doc.data();
+          this.setState({allStateData: fir_data.estatal})
+        });
+
+      }).catch(err => console.error("ERR: ", err));
+  }
 
   getDataFromApi = (query_edo, query_muni) => {
     //TODO: Sanitizar el input del usuario desde cliente
@@ -159,10 +180,7 @@ export default class App extends Component {
       .then(json => {
         let keysArr = Object.keys(json.datos);
 
-
-        const db = firebase.firestore();
-        const fir_dataCovid_ref = db.collection('datosCovid');
-        let allData = fir_dataCovid_ref.get()
+        let allStateData = fir_dataCovid_ref.get()
           .then(snapshot => {
             snapshot.forEach(doc => {
               //Getting and returning data from firebase
@@ -184,6 +202,7 @@ export default class App extends Component {
                 }
               }
 
+
               if(keysArr.indexOf("municipio")){
                 this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
               }else{
@@ -191,37 +210,8 @@ export default class App extends Component {
               }
 
             });
+
           }).catch(err => console.error("ERR: ", err));
-
-        //GET GSHEET STATE DATA
-
-        // fetch("http://localhost/covid-data/data.json")
-        //   .then(data => data.json())
-        //   .then(gSheetJson => {
-        //     let obj = gSheetJson;
-        //     for(const key of Object.keys(obj)){
-        //       let edoClav = key;
-        //       let edoStat = obj[key];
-        //       if(edoClav === comparison){
-        //         //Asigna un nuevo campo "estatus" al objeto json y le asigna
-        //         // el valor de la gSheet
-        //         if(keysArr.indexOf("estado")){
-        //           json.datos.cov_status = parseInt(edoStat, 10);
-        //         }
-        //
-        //       }
-        //     }
-        //
-        //     if(keysArr.indexOf("municipio")){
-        //       this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
-        //     }else{
-        //       this.setState({dataMunicipio: json});
-        //     }
-        //
-        //     return json;
-        //
-        // }).catch(error => console.error(error));
-
 
       }).catch(error => {
         this.setState({
@@ -322,7 +312,8 @@ export default class App extends Component {
       userInput,
       filteredSuggestions,
       handleClickSuggestion,
-      estado
+      estado,
+      allStateData
     } = this.state;
 
     let renderEstado = (dataEstado !== '') ? true : false;
@@ -336,6 +327,8 @@ export default class App extends Component {
           <div className="logo_container">
             <img src={logo} alt="Logo Buscador Coronavirus" />
           </div>
+
+          <MapBox edoEstatus={allStateData} />
 
           <div className="inner_wrapper">
             <form onSubmit={this.handleSubmit}>

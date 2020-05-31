@@ -1,5 +1,5 @@
 body{background-color: #FFFFEF;color:#4A4B69;font-family: 'Roboto', sans-serif;}
-a{text-decoration: none;color:white;}
+a{text-decoration: none;color:white;font-size: 13px;}
 a:hover{opacity:0.7;}
 /* .light_green_bg{border-left:8px solid #C7EDB6;}
 .green_bg{border-left:8px solid #8DDA70;}
@@ -17,6 +17,7 @@ a:hover{opacity:0.7;}
 .bg_salmon{background-color: #FF7E7C;}
 .bg_blue{background-color: #5369E9;}
 .bg_lightGrey{background-color: #9293A5;}
+path{stroke:#fff;}
 
 /* ._green{color:#8DDA70;}
 ._yellow{color:#FFE849;}
@@ -46,6 +47,8 @@ input[type="submit"], input[type="button"]{
 .main_section_wrapper h1{text-align: center;}
 .btn_search{background-color: #5369E9;}
 .btn_clean{background-color: #9293A5;}
+
+.mapa_wrapper{max-width: 900px;margin:32px auto;}
 
 .results_section{width: 100%;margin:34px auto;}
 .results_section .inner_wrapper{padding:16px;flex-shrink: 0;width:80%;margin:24px auto;}
