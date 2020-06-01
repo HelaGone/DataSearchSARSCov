@@ -10,7 +10,7 @@ const MapBox = (props) => {
       let objValues = Object.values(edo)[0];
       let objKeys = Object.keys(edo)[0];
 
-      console.log(objValues);
+      // console.log(objValues);
       let edoCalif = objValues.estatus;
 
       let svgNode = document.getElementById(objKeys);
