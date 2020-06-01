@@ -1,5 +1,4 @@
 import React, {Fragment} from 'react';
-import mapaMex from '../mapamex.svg';
 
 const MapBox = (props) => {
   let {edoEstatus} = props;
