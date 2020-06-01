@@ -1,6 +1,8 @@
 import React, {Fragment} from 'react';
 const EstatusBox = (props) => {
   let {estatus, localidad} = props;
+  const weeekdays = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
+  const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   let descripcion = [
     [
       "Actividades esenciales (Incluyen minería, construcción y fabricación de equipo de transporte)"
@@ -56,11 +58,20 @@ const EstatusBox = (props) => {
     }
   }
 
+  let todayDate = new Date();
+  let day = weeekdays[todayDate.getDay()];
+  let daynum = todayDate.getDate();
+  let month = months[todayDate.getMonth()];
+  let year = todayDate.getFullYear();
+
   return(
     <Fragment>
       {
         renderEdo && (
           <div className="localidad_estatus_box">
+            <div className="update_date">
+              <p>ACTUALIZADO: <span>{`${day}, ${daynum}/${month}/${year}`}</span></p>
+            </div>
             <h2>{localidad.toUpperCase()}</h2>
             <h3>Semáforo de reactivación: </h3>
             <p className={statusColorClass}>{lbl_estatus}</p>
