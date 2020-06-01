@@ -319,7 +319,6 @@ export default class App extends Component {
     let renderEstado = (dataEstado !== '') ? true : false;
     let renderMunicipio = (dataMunicipio !== '') ? true : false;
 
-
     return (
       <Fragment>
         <section className="main_section_wrapper">

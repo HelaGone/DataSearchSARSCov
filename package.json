@@ -1,6 +1,7 @@
 {
   "name": "econovid",
   "version": "0.1.0",
+  "homepage": "https://noticieros.televisa.com/semaforo-covid-mexico-por-estado-y-municipio",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
