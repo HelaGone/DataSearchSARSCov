@@ -40,12 +40,17 @@ export default class App extends Component {
       showSuggestions: false,
       userInput: '',
       onChangeAuto: this.handleOnChangeAuto,
-      handleClickSuggestion: this.handleClickSuggestion
+      handleClickSuggestion: this.handleClickSuggestion,
     };
   };
 
   componentDidMount(){
       this.getDataForMap();
+      let params = this.handleGetParams(window.location.href);
+      let {estado} = params;
+      if(estado !== undefined && estado !== '' && typeof estado == 'string'){
+        this.getDataFromApi(estado);
+      }
   }
 
   getDataForMap = () => {
@@ -60,22 +65,24 @@ export default class App extends Component {
       }).catch(err => console.error("ERR: ", err));
   }
 
-  getDataFromApi = (query_edo, query_muni) => {
-    //TODO: Sanitizar el input del usuario desde cliente
+  getDataFromApi = (query_edo = '', query_muni = '') => {
+
     if( 'string' !== typeof query_edo || 'string' !== typeof query_muni){
       return;
     }
 
+    let sQuery_edo = this.sanitizeUserInput(query_edo);
+    let sQuery_muni = this.sanitizeUserInput(query_muni);
     let apiurl = "https://noticieros.televisa.com/sarscov/"; //PROD;
     // let apiurl = "http://localhost/sarscov/"; //DEV
-    if(query_edo !== '' && query_muni !== ''){
-      apiurl += `?estado=${this.sanitizeUserInput(query_edo)}&municipio=${this.sanitizeUserInput(query_muni)}`;
-    }else if(query_edo !== '' && query_muni === ''){
-      apiurl += `?estado=${this.sanitizeUserInput(query_edo)}`;
+    if(sQuery_edo !== '' && sQuery_muni !== ''){
+      apiurl += `?estado=${sQuery_edo}&municipio=${sQuery_muni}`;
+    }else if(sQuery_edo !== '' && sQuery_muni === ''){
+      apiurl += `?estado=${sQuery_edo}`;
     }
 
     let comparison = "";
-    switch(query_edo){
+    switch(sQuery_edo){
       case "aguascalientes":
         comparison = "MX-AGU";
       break;
@@ -319,6 +326,20 @@ export default class App extends Component {
     });
   }
 
+  handleGetParams = (url) => {
+    let paramsObj = {};
+    let parser = document.createElement('a');
+    parser.href = url;
+    let query = parser.search.substring(1);
+    let vars = query.split('&');
+    for(let i = 0; i<vars.length; i++){
+      let pair = vars[i].split('=');
+      paramsObj[pair[0]] = decodeURIComponent(pair[1]);
+    }
+    this.setState({estado: paramsObj.estado})
+    return paramsObj;
+  }
+
   render(){
 
     let {
@@ -331,7 +352,8 @@ export default class App extends Component {
       filteredSuggestions,
       handleClickSuggestion,
       estado,
-      allStateData
+      allStateData,
+      params
     } = this.state;
 
     let renderEstado = (dataEstado !== '') ? true : false;
