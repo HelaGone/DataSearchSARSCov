@@ -342,7 +342,9 @@ export default class App extends Component {
         <section className="main_section_wrapper">
 
           <div className="logo_container">
-            <img src={logo} alt="Logo Buscador Coronavirus" />
+            <a href="https://noticieros.televisa.com" title="Regresar a Noticieros Televisa">
+              <img src={logo} alt="Logo Buscador Coronavirus" />
+            </a>
           </div>
 
           <div className="inner_wrapper">
@@ -428,7 +430,7 @@ export default class App extends Component {
           <div className="inner_wrapper footer_source">Fuente: Secretaría de Salud</div>
 
           <div className="btn_returnNT">
-            <a href="https://noticieros.televisa.com">Ir a NOTICIEROS TELEVISA</a>
+            <a href="https://noticieros.televisa.com" title="Regresar a Noticieros Televisa">Ir a NOTICIEROS TELEVISA</a>
           </div>
         </section>
       </Fragment>
