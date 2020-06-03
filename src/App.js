@@ -208,6 +208,8 @@ export default class App extends Component {
               }else{
                 this.setState({dataMunicipio: json});
               }
+              //Scroll to Result
+              document.getElementById('estatus_box').scrollIntoView({behavior:'smooth'});
 
             });
 
