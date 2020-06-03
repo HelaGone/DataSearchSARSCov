@@ -49,7 +49,7 @@ export default class App extends Component {
   }
 
   getDataForMap = () => {
-    let allStateData = fir_dataCovid_ref.get()
+    fir_dataCovid_ref.get()
       .then(snapshot => {
         snapshot.forEach(doc => {
           //Getting and returning data from firebase
@@ -180,7 +180,7 @@ export default class App extends Component {
       .then(json => {
         let keysArr = Object.keys(json.datos);
 
-        let allStateData = fir_dataCovid_ref.get()
+        fir_dataCovid_ref.get()
           .then(snapshot => {
             snapshot.forEach(doc => {
               //Getting and returning data from firebase
@@ -253,9 +253,25 @@ export default class App extends Component {
     const target = event.target;
     const value = target.value;
 
+    // this.setState({
+    //   estado: value
+    // });
+
     this.setState({
-      estado: value
-    });
+      allStateData: {},
+      dataEstado:"",
+      dataMunicipio: "",
+      estado:value,
+      showInputMuni: false,
+      errorState: false,
+      muniSuggest: [],
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      userInput: '',
+      onChangeAuto: this.handleOnChangeAuto,
+      handleClickSuggestion: this.handleClickSuggestion
+    })
   }
 
   /*
@@ -327,8 +343,6 @@ export default class App extends Component {
             <img src={logo} alt="Logo Buscador Coronavirus" />
           </div>
 
-          <MapBox edoEstatus={allStateData} />
-
           <div className="inner_wrapper">
             <form onSubmit={this.handleSubmit}>
               <select value={estado} onChange={this.handleOnChange}>
@@ -386,7 +400,7 @@ export default class App extends Component {
             </form>
           </div>
 
-          <section className="status_alert inner_wrapper">
+          <section id="estatus_box" className="status_alert inner_wrapper">
             <EstatusBox estatus={dataEstado} localidad={estado}/>
           </section>
 
@@ -406,6 +420,9 @@ export default class App extends Component {
             }
 
           </section>
+
+          <MapBox edoEstatus={allStateData} />
+
           <div className="inner_wrapper footer_source">Fuente: Secretaría de Salud</div>
 
           <div className="btn_returnNT">

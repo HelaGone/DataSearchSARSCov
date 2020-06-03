@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 
 const MapBox = (props) => {
   let {edoEstatus} = props;
@@ -14,7 +14,7 @@ const MapBox = (props) => {
       let edoCalif = objValues.estatus;
 
       let svgNode = document.getElementById(objKeys);
-      if(svgNode != undefined){
+      if(svgNode !== undefined){
         switch(edoCalif){
           case 1:
             svgNode.style.fill = "#FF7E7C";
@@ -32,6 +32,7 @@ const MapBox = (props) => {
         }
 
       }
+      return "Colors";
     });
   }
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 const InformationBox = (props) => {
 
-  let {localidad, data} = props;
+  let {localidad} = props;
   let colorClass = 'inner_wrapper';
 
   return(
