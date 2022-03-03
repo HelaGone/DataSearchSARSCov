@@ -2,7 +2,7 @@ import React, {Fragment, Component} from 'react';
 import './App.css';
 import InformationBox from './components/InformationBox';
 import ErrorBox from './components/ErrorBox';
-import Autocomplete from './components/Autocomplete';
+//import Autocomplete from './components/Autocomplete';
 import EstatusBox from './components/EstatusBox';
 import MapBox from './components/MapBox';
 import * as firebase from 'firebase/app';
@@ -64,6 +64,52 @@ export default class App extends Component {
 
       }).catch(err => console.error("ERR: ", err));
   }
+/*
+  //Obtiene solo los datos estatales
+  getDataFromFirebase = (query_edo = "") => {
+    if("string" !== typeof query_edo){
+        return;
+    }
+    let sQuery_edo = this.sanitizeUserInput(query_edo);
+
+    fir_dataCovid_ref.get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          //Getting and returning data from firebase
+          let fir_data = doc.data();
+
+
+          let obj = fir_data.estatal;
+
+          for(const key of Object.keys(obj) ){
+            let edoClav = Object.keys(obj[key]);
+            let edobj = Object.values( obj[key]);
+            let edoStat = edobj[0].estatus;
+
+            if(edoClav[0] === comparison){
+              //Asigna un nuevo campo "estatus" al objeto json y le asigna
+              // el valor de la gSheet
+              if(keysArr.indexOf("estado")){
+                json.datos.cov_status = parseInt(edoStat, 10);
+              }
+
+            }
+          }
+
+          if(keysArr.indexOf("municipio")){
+            this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
+          }else{
+            this.setState({dataMunicipio: json});
+          }
+          //Scroll to Result
+          document.getElementById('estatus_box').scrollIntoView({behavior:'smooth'});
+
+        });
+
+      }).catch(err => console.error("ERR: ", err));
+
+  }
+*/
 
   getDataFromApi = (query_edo = '', query_muni = '') => {
 
@@ -72,14 +118,17 @@ export default class App extends Component {
     }
 
     let sQuery_edo = this.sanitizeUserInput(query_edo);
-    let sQuery_muni = this.sanitizeUserInput(query_muni);
+    //let sQuery_muni = this.sanitizeUserInput(query_muni);
     let apiurl = "https://noticieros.televisa.com/sarscov/"; //PROD;
     // let apiurl = "http://localhost/sarscov/"; //DEV
-    if(sQuery_edo !== '' && sQuery_muni !== ''){
-      apiurl += `?estado=${sQuery_edo}&municipio=${sQuery_muni}`;
-    }else if(sQuery_edo !== '' && sQuery_muni === ''){
-      apiurl += `?estado=${sQuery_edo}`;
-    }
+
+    // if(sQuery_edo !== '' && sQuery_muni !== ''){
+    //   apiurl += `?estado=${sQuery_edo}&municipio=${sQuery_muni}`;
+    // }else if(sQuery_edo !== '' && sQuery_muni === ''){
+    //   apiurl += `?estado=${sQuery_edo}`;
+    // }
+
+    apiurl += `?estado=${sQuery_edo}`;
 
     let comparison = "";
     switch(sQuery_edo){
@@ -208,7 +257,6 @@ export default class App extends Component {
 
                 }
               }
-
 
               if(keysArr.indexOf("municipio")){
                 this.setState({dataEstado: json, muniSuggest: json.datos.municipios, showInputMuni: true});
@@ -345,15 +393,15 @@ export default class App extends Component {
     let {
       dataEstado,
       dataMunicipio,
-      showSuggestions,
-      showInputMuni,
-      onChangeAuto,
-      userInput,
-      filteredSuggestions,
-      handleClickSuggestion,
+      //showSuggestions,
+      //showInputMuni,
+      //onChangeAuto,
+      //userInput,
+      //filteredSuggestions,
+      //handleClickSuggestion,
       estado,
       allStateData,
-      params
+      //params
     } = this.state;
 
     let renderEstado = (dataEstado !== '') ? true : false;
@@ -369,7 +417,7 @@ export default class App extends Component {
             </a>
           </div>
 
-          <div className="inner_wrapper">
+          {/*<div className="inner_wrapper">
             <form onSubmit={this.handleSubmit}>
               <select value={estado} onChange={this.handleOnChange}>
                 <option default>Selecciona tu estado</option>
@@ -432,20 +480,10 @@ export default class App extends Component {
 
           <section className="results_section flex_wrapper">
             { this.state.errorState && <ErrorBox /> }
-
-            {
-              renderMunicipio && (
-                <InformationBox data={dataMunicipio} localidad={this.state.userInput}/>
-              )
-            }
-
-            {
-              renderEstado && (
-                <InformationBox data={dataEstado} localidad={this.state.estado}/>
-              )
-            }
-
+            { renderMunicipio && (<InformationBox data={dataMunicipio} localidad={this.state.userInput}/>)}
+            { renderEstado && (<InformationBox data={dataEstado} localidad={this.state.estado}/>)}
           </section>
+          */}
 
           <MapBox edoEstatus={allStateData} />
 
